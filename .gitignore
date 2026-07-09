@@ -1,0 +1,11 @@
+bin/
+obj/
+*.user
+.vs/
+.claude/
+
+# 运行时数据文件
+data/
+config.yaml
+cookie.json
+blacklist.txt

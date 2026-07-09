@@ -1,0 +1,352 @@
+﻿<Window x:Class="BiliCommunityGuard.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="A盾"
+        Width="1360"
+        Height="930"
+        MinWidth="1140"
+        MinHeight="820"
+        WindowStartupLocation="CenterScreen"
+        Background="#EEF2F6">
+    <Window.Resources>
+        <SolidColorBrush x:Key="PanelBrush" Color="#FFFFFFFF" />
+        <SolidColorBrush x:Key="AccentBrush" Color="#0F766E" />
+        <SolidColorBrush x:Key="AccentSoftBrush" Color="#D5F5F1" />
+        <SolidColorBrush x:Key="DangerBrush" Color="#B91C1C" />
+        <SolidColorBrush x:Key="InfoBrush" Color="#1D4ED8" />
+        <SolidColorBrush x:Key="TextBrush" Color="#0F172A" />
+        <SolidColorBrush x:Key="MutedTextBrush" Color="#475569" />
+        <Style TargetType="Border" x:Key="PanelStyle">
+            <Setter Property="Background" Value="{StaticResource PanelBrush}" />
+            <Setter Property="CornerRadius" Value="18" />
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Margin" Value="0,0,0,14" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="14,10" />
+            <Setter Property="Margin" Value="0,0,10,0" />
+            <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="BorderBrush" Value="#CBD5E1" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+    </Window.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled"
+                  Padding="22"
+                  CanContentScroll="False">
+        <Grid MinHeight="886">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Style="{StaticResource PanelStyle}" Background="#0F172A">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock VerticalAlignment="Center"
+                           Text="A盾"
+                           FontSize="34"
+                           FontWeight="SemiBold"
+                           Foreground="White" />
+
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <Button Command="{Binding ReloadAllCommand}" Content="重新加载" />
+                    <Button Command="{Binding StartBotCommand}" Background="{StaticResource InfoBrush}" Content="开始运行" />
+                    <Button Command="{Binding StopBotCommand}" Background="{StaticResource DangerBrush}" Content="停止运行" />
+                    <Button Command="{Binding CreateSampleFilesCommand}" Background="#2563EB" Content="生成示例文件" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Style="{StaticResource PanelStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="136" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock VerticalAlignment="Center" Foreground="{StaticResource MutedTextBrush}" Text="主配置文件" />
+                <TextBox Grid.Column="1" Text="{Binding ConfigPath, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Grid.Column="2" Command="{Binding BrowseConfigCommand}" Content="选择文件" />
+
+                <TextBlock Grid.Row="1" VerticalAlignment="Center" Foreground="{StaticResource MutedTextBrush}" Text="Cookie账号文件" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CookiePath, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Grid.Row="1" Grid.Column="2" Command="{Binding BrowseCookieCommand}" Content="选择文件" />
+
+                <TextBlock Grid.Row="2" VerticalAlignment="Center" Foreground="{StaticResource MutedTextBrush}" Text="黑名单文件" />
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding BlacklistPath, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Grid.Row="2" Grid.Column="2" Command="{Binding BrowseBlacklistCommand}" Content="选择文件" />
+
+                <Border Grid.Row="3"
+                        Grid.ColumnSpan="3"
+                        Margin="0,14,0,0"
+                        Padding="14"
+                        CornerRadius="12"
+                        Background="{StaticResource AccentSoftBrush}">
+                    <ScrollViewer MaxHeight="120"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+                        <TextBlock Foreground="{StaticResource TextBrush}"
+                                   Text="{Binding StatusMessage}"
+                                   TextWrapping="Wrap" />
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="410" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Style="{StaticResource PanelStyle}">
+                    <StackPanel>
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextBrush}" Text="当前概览" />
+                        <UniformGrid Margin="0,14,0,0" Columns="2" Rows="5">
+                            <StackPanel Margin="0,0,0,14">
+                                <TextBlock Foreground="{StaticResource MutedTextBrush}" Text="运行状态" />
+                                <TextBlock FontSize="24" FontWeight="SemiBold" Text="{Binding RunningSummary}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,14">
+                                <TextBlock Foreground="{StaticResource MutedTextBrush}" Text="运行阶段" />
+                                <TextBlock FontSize="24" FontWeight="SemiBold" Text="{Binding RuntimeStateSummary}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,14">
+                                <TextBlock Foreground="{StaticResource MutedTextBrush}" Text="保护 UP 数" />
+                                <TextBlock FontSize="24" FontWeight="SemiBold" Text="{Binding ProtectUpCount}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,14">
+                                <TextBlock Foreground="{StaticResource MutedTextBrush}" Text="黑名单数" />
+                                <TextBlock FontSize="24" FontWeight="SemiBold" Text="{Binding BlacklistCount}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,14">
+                                <TextBlock Foreground="{StaticResource MutedTextBrush}" Text="Cookie 账号数" />
+                                <TextBlock FontSize="24" FontWeight="SemiBold" Text="{Binding CookieAccountCount}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,14">
+                                <TextBlock Foreground="{StaticResource MutedTextBrush}" Text="有效账号数" />
+                                <TextBlock FontSize="24" FontWeight="SemiBold" Text="{Binding ValidCookieAccountCount}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,14">
+                                <TextBlock Foreground="{StaticResource MutedTextBrush}" Text="扫描间隔" />
+                                <TextBlock FontSize="24" FontWeight="SemiBold" Text="{Binding ScanIntervalSummary}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,14">
+                                <TextBlock Foreground="{StaticResource MutedTextBrush}" Text="视频保护数" />
+                                <TextBlock FontSize="24" FontWeight="SemiBold" Text="{Binding VideoWindowSummary}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,14">
+                                <TextBlock Foreground="{StaticResource MutedTextBrush}" Text="动态保护数" />
+                                <TextBlock FontSize="24" FontWeight="SemiBold" Text="{Binding DynamicWindowSummary}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,14">
+                                <TextBlock Foreground="{StaticResource MutedTextBrush}" Text="评论模式" />
+                                <TextBlock FontSize="24" FontWeight="SemiBold" Text="{Binding CommentModeSummary}" />
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="1" Style="{StaticResource PanelStyle}">
+                    <StackPanel>
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextBrush}" Text="运行统计" />
+                        <ScrollViewer Margin="0,14,0,0" VerticalScrollBarVisibility="Auto" Height="360">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Foreground="{StaticResource MutedTextBrush}" Text="轮次" />
+                                <TextBlock Grid.Column="1" Text="{Binding CycleCountSummary}" />
+
+                                <TextBlock Grid.Row="1" Foreground="{StaticResource MutedTextBrush}" Text="扫描内容数" />
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ScannedContentSummary}" />
+
+                                <TextBlock Grid.Row="2" Foreground="{StaticResource MutedTextBrush}" Text="黑名单命中" />
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding BlacklistHitSummary}" />
+
+                                <TextBlock Grid.Row="3" Foreground="{StaticResource MutedTextBrush}" Text="举报尝试数" />
+                                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding ReportAttemptSummary}" />
+
+                                <TextBlock Grid.Row="4" Foreground="{StaticResource MutedTextBrush}" Text="成功/已报" />
+                                <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SuccessfulReportSummary}" />
+
+                                <TextBlock Grid.Row="5" Foreground="{StaticResource MutedTextBrush}" Text="每轮扫描数" />
+                                <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding ScanBatchSummary}" />
+
+                                <TextBlock Grid.Row="6" Foreground="{StaticResource MutedTextBrush}" Text="评论页大小" />
+                                <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding CommentPageSizeSummary}" />
+
+                                <TextBlock Grid.Row="7" Foreground="{StaticResource MutedTextBrush}" Text="再次举报间隔" />
+                                <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding MinReReportSummary}" />
+
+                                <TextBlock Grid.Row="8" Foreground="{StaticResource MutedTextBrush}" Text="账号冷却时间" />
+                                <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding AccountCooldownSummary}" />
+
+                                <TextBlock Grid.Row="9" Foreground="{StaticResource MutedTextBrush}" Text="状态文件" />
+                                <TextBlock Grid.Row="9" Grid.Column="1" Text="{Binding StateFileSummary}" TextWrapping="Wrap" />
+
+                                <TextBlock Grid.Row="10" Foreground="{StaticResource MutedTextBrush}" Text="历史文件" />
+                                <TextBlock Grid.Row="10" Grid.Column="1" Text="{Binding ReportHistorySummary}" TextWrapping="Wrap" />
+
+                                <TextBlock Grid.Row="11" Foreground="{StaticResource MutedTextBrush}" Text="最后活动" />
+                                <TextBlock Grid.Row="11" Grid.Column="1" Text="{Binding LastActivitySummary}" TextWrapping="Wrap" />
+
+                                <TextBlock Grid.Row="12" Foreground="{StaticResource MutedTextBrush}" Text="最后内容" />
+                                <TextBlock Grid.Row="12" Grid.Column="1" Text="{Binding LastContentSummary}" TextWrapping="Wrap" />
+                            </Grid>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="2" Style="{StaticResource PanelStyle}">
+                    <StackPanel>
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextBrush}" Text="保护对象" />
+                        <ListBox Margin="0,14,0,0" Height="220" ItemsSource="{Binding ProtectUps}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <TabControl Grid.Column="2">
+                <TabItem Header="配置摘要">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="16">
+                            <TextBlock FontSize="18" FontWeight="SemiBold" Text="运行参数" />
+                            <Grid Margin="0,14,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="180" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Foreground="{StaticResource MutedTextBrush}" Text="举报原因" />
+                                <TextBlock Grid.Column="1" Text="{Binding ReportReasonSummary}" />
+
+                                <TextBlock Grid.Row="1" Foreground="{StaticResource MutedTextBrush}" Text="举报补充说明" />
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ReportContentSummary}" TextWrapping="Wrap" />
+
+                                <TextBlock Grid.Row="2" Foreground="{StaticResource MutedTextBrush}" Text="请求随机间隔" />
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding RequestIntervalSummary}" />
+
+                                <TextBlock Grid.Row="3" Foreground="{StaticResource MutedTextBrush}" Text="每轮扫描数" />
+                                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding ScanBatchSummary}" />
+
+                                <TextBlock Grid.Row="4" Foreground="{StaticResource MutedTextBrush}" Text="评论页大小" />
+                                <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding CommentPageSizeSummary}" />
+
+                                <TextBlock Grid.Row="5" Foreground="{StaticResource MutedTextBrush}" Text="再次举报间隔" />
+                                <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding MinReReportSummary}" />
+
+                                <TextBlock Grid.Row="6" Foreground="{StaticResource MutedTextBrush}" Text="账号冷却时间" />
+                                <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding AccountCooldownSummary}" />
+
+                                <TextBlock Grid.Row="7" Foreground="{StaticResource MutedTextBrush}" Text="状态文件" />
+                                <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding StateFileSummary}" TextWrapping="Wrap" />
+
+                                <TextBlock Grid.Row="8" Foreground="{StaticResource MutedTextBrush}" Text="举报历史文件" />
+                                <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding ReportHistorySummary}" TextWrapping="Wrap" />
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Header="Cookie账号">
+                    <Grid Margin="16">
+                        <DataGrid ItemsSource="{Binding CookieAccounts}"
+                                  CanUserResizeColumns="True"
+                                  CanUserReorderColumns="False"
+                                  MinColumnWidth="80"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  HeadersVisibility="Column"
+                                  CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="#" Binding="{Binding Index}" Width="60" MinWidth="50" />
+                                <DataGridTextColumn Header="账号标识" Binding="{Binding DisplayName}" Width="140" MinWidth="120" />
+                                <DataGridTextColumn Header="状态" Binding="{Binding Status}" Width="110" MinWidth="90" />
+                                <DataGridTextColumn Header="细节" Binding="{Binding RuntimeDetail}" Width="1.4*" MinWidth="220" />
+                                <DataGridTextColumn Header="缺失字段" Binding="{Binding MissingFieldsSummary}" Width="180" MinWidth="140" />
+                                <DataGridTextColumn Header="Cookie 摘要" Binding="{Binding MaskedCookie}" Width="2*" MinWidth="300" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="运行日志">
+                    <Grid Margin="16">
+                        <TextBox Text="{Binding LogText}"
+                                 IsReadOnly="True"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Auto"
+                                 HorizontalScrollBarVisibility="Auto"
+                                 TextWrapping="Wrap"
+                                 FontFamily="Consolas"
+                                 Background="#0F172A"
+                                 Foreground="#E2E8F0" />
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+    </ScrollViewer>
+</Window>
+
